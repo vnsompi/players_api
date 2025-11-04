@@ -43,12 +43,15 @@ INSTALLED_APPS = [
 
     'players',
     'api',
+    'users',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10
 }
+
+AUTH_USER_MODEL = "users.User"
 
 
 MIDDLEWARE = [
