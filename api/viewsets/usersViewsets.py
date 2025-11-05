@@ -1,8 +1,10 @@
 from rest_framework import viewsets, status
 from users.models import User
-from api.serializers.users import UserSerializer,RegisterSerializer
+from api.serializers.users import UserSerializer,RegisterSerializer, LoginSerializer
 from rest_framework.response import Response
-
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -40,3 +42,37 @@ class RegisterViewSet(viewsets.ViewSet):
         },
             status=status.HTTP_201_CREATED,
         )
+
+
+class ProtectedView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"message", 'this is a private view'}, status=status.HTTP_200_OK)
+
+
+class PublicView(APIView):
+
+    def get(self, request):
+        return Response({"message", 'this is a public view'}, status=status.HTTP_200_OK)
+
+
+
+class LoginView(viewsets.ViewSet):
+
+    """Cette fonction authentifie un utilisateur et renvoie ses jetons JWT"""
+
+    serializer = LoginSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer(data=request.data)
+        try:
+           serializer.is_valid(raise_exception=True)
+
+        except TokenError as e:
+            raise InvalidToken(e)
+
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+
+
+

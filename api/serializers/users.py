@@ -4,6 +4,8 @@ serializers for users
 from rest_framework import serializers
 from users.models import User
 from django.contrib.auth.password_validation import validate_password
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth.models import update_last_login
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -33,6 +35,27 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 
+
+class LoginSerializer(TokenObtainPairSerializer):
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        self.get_token(user=self.user)
+
+        refresh = self.get_token(self.user)
+
+        user = UserSerializer(self.user).data
+
+        data['refresh'] = str(refresh)
+        data['access'] = str(refresh.access_token)
+
+        data['user'] = user
+
+        update_last_login(None, self.user)
+
+
+        return data
 
 
 
