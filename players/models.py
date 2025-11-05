@@ -41,7 +41,7 @@ class Player(models.Model):
         return f"{self.name} - {self.id}"
 
     class Meta:
-        """this function make a search and put the null value in the end """
+        """this function make a search and put the null value market and caps   in the end """
         ordering = [
             models.F("market_value").desc(nulls_last=True),
             models.F("caps").desc(nulls_last=True),

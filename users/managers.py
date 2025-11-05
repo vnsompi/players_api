@@ -5,6 +5,8 @@ from django.forms import ValidationError
 
 class CustomUserManager(BaseUserManager):
 
+
+    """this function return the public_id from the database"""
     def get_object_by_public_id(self, public_id):
 
         try:
@@ -18,7 +20,7 @@ class CustomUserManager(BaseUserManager):
         except (ValueError, TypeError):
             raise Http404("Invalid public ID")
 
-
+    """this one create a user"""
     def create_user(self, email, first_name, last_name,password=None , **fields):
 
         if email is None:
@@ -38,6 +40,7 @@ class CustomUserManager(BaseUserManager):
 
         return user
 
+    """this one create a superuser"""
     def create_superuser(self, email, first_name, last_name, password=None, **extra_fields):
 
         extra_fields.setdefault("is_staff", True)
