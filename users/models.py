@@ -5,11 +5,14 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from .managers import CustomUserManager
+from players.models import Player
 
 
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+
+    favorite_players = models.ManyToManyField(Player,related_name='fans')
     public_id = models.UUIDField(db_index=True, default=uuid.uuid4, editable=False, unique=True)
 
     first_name = models.CharField(max_length=255)

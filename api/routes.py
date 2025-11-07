@@ -16,5 +16,8 @@ routes.register('users', UserViewSet, basename='Users')
 routes.register('auth/register', RegisterViewSet, basename='Register')
 routes.register('auth/login', LoginView, basename='Login')
 
+#users/public_id/toggle_favorite
+#users/public_id/list_favorite
+
 urlpatterns = routes.urls
 
