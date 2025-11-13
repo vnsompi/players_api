@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import datetime
+import django.utils.timezone as timezone
+timezone.utc = datetime.timezone.utc
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,9 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-
+    #third party
     'rest_framework',
     'rest_framework_simplejwt',
+     'django_celery_results',
+     "django_celery_beat",
+
 
     'players',
     'api',
@@ -151,3 +158,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#celery config
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TIMEZONE = 'UTC'
+
+#celery beat
+CELERY_BEAT_SCHEDULE = 'django_celery_beat.schedulers.DatabaseScheduler'
