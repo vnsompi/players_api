@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:14.3-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: django_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "@vainqueur"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    restart: always
+
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    environment:
+      POSTGRES_DB: django_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "@vainqueur"
+
+  celery-beat:
+    build: .
+    command: ["celery", "-A", "backend", "worker", "--beat", "-l", "INFO"]
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+      - redis
+    environment:
+      POSTGRES_DB: django_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "@vainqueur"
+
+volumes:
+  postgres_data:
