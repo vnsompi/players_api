@@ -1,6 +1,7 @@
 import os
 
 from celery import Celery
+from celery.schedules import crontab
 
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
@@ -18,7 +19,13 @@ app.conf.beat_schedule = {
     "count_players-every-30-secs":{
         "task": "players.tasks.count_players",
         "schedule":30.0,
-    }
+    },
+
+        "update_players-everyday":{
+            "task": "players.tasks.update_players_from_json",
+            "schedule": crontab(hour=8, minute=13),
+        }
+
 }
 
 # Load task modules from all registered Django apps.

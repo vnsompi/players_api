@@ -1,7 +1,7 @@
 from django.contrib.auth.models import BaseUserManager
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-from django.forms import ValidationError
+
 
 class CustomUserManager(BaseUserManager):
 

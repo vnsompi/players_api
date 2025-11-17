@@ -6,7 +6,7 @@ import json
 import logging
 from celery import shared_task
 from dateutil import parser
-from players.models import Player  # adapte selon ton projet
+from players.models import Player
 from django.conf import settings
 
 @shared_task
