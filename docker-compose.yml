@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.12'
 
 services:
   db:
@@ -16,7 +16,9 @@ services:
     restart: always
 
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     volumes:
@@ -30,7 +32,9 @@ services:
       POSTGRES_PASSWORD: "@vainqueur"
 
   celery-beat:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     command: ["celery", "-A", "backend", "worker", "--beat", "-l", "INFO"]
     volumes:
       - .:/app
