@@ -1,10 +1,15 @@
-FROM python
+FROM python:3.11
 
 WORKDIR /app
 
-COPY . /app
+# Copier seulement requirements.txt d'abord
+COPY requirements.txt .
 
-RUN pip install  --no-cache-dir -r requirements.txt
+# Installer les dépendances
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copier le reste du projet
+COPY . .
 
 EXPOSE 8000
 
